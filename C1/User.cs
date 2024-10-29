@@ -3,16 +3,21 @@ using System.Text.Json;
 
 namespace C1
 {
-    public sealed record User(string Name, [Phone] string Number, [EmailAddress] string Email);
+    public sealed record User(string Name, [Phone] string Number, [EmailAddress(ErrorMessage = "Incorrect Phone Number")] string Email);
+
     public static class UserValidator
     {
         public static List<ValidationResult>? Validate(this User user)
         {
             var validationResults = new List<ValidationResult>();
-            bool isValid = Validator.TryValidateObject(user, new ValidationContext(user), validationResults, true);
-            return isValid ? default : validationResults;
+            var validationContext = new ValidationContext(user);
+
+            bool isValid = Validator.TryValidateObject(user, validationContext, validationResults, true);
+
+            return isValid ? null : validationResults;
         }
-        public static bool IsValid(this User user) => Validate(user)?.Count == 0;
+
+        public static bool IsValid(this User user) => Validate(user) is null;
     }
     public static class UserRepository
     {
