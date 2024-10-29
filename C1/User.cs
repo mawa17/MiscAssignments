@@ -6,7 +6,6 @@ namespace C1
     public static class UserRepository
     {
         private static HashSet<User> _users = new();
-        
         public static IReadOnlyCollection<User> Users => _users;
         private const string FilePath = "C:\\Users\\marcu\\Desktop\\H1\\Programming\\MiscAssignments\\users.json";
         public static async Task LoadUsers()
@@ -133,7 +132,7 @@ namespace C1
         public static void RemoveUser(in User user) => _users.Remove(user);
         public static bool EditUser(in User user, in User newUser, bool exact = false)
         {
-            var usr = SearchUser(user, exact);
+            var usr = GetUser(user, exact);
             if (usr is null) return false;
             RemoveUser(usr);
             AddUser(newUser);
@@ -141,7 +140,7 @@ namespace C1
         }
         public static IEnumerable<User> GetUsers(this IEnumerable<User> users, int quantity, int offset) => users.Skip(offset).Take(quantity);
         public static IEnumerable<User> SortUsers<T>(this IEnumerable<User> users, Func<User, T> func) => users.OrderBy(func);
-        public static User? SearchUser(User user, bool exact = false)
+        public static User? GetUser(User user, bool exact = false)
         {
             return _users.Where(usr =>
             exact ? usr.Equals(user) :
@@ -150,6 +149,6 @@ namespace C1
             usr.Number.Equals(user.Number, StringComparison.OrdinalIgnoreCase)).First() ?? null;
         }
         public static IEnumerable<User?> SearchUsers(bool exact = false, params User[] users) =>
-            users.Select(user => SearchUser(user, exact)).Where(result => result != null);
+            users.Select(user => GetUser(user, exact)).Where(result => result != null);
     }
 }
