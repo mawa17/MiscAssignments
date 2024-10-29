@@ -33,28 +33,28 @@ namespace C1
 
         public static void AddUser(in User user) => _users.Add(user);
         public static void RemoveUser(in User user) => _users.Remove(user);
-        public static bool EditUser(in User user, in User newUser)
+        public static bool EditUser(in User user, in User newUser, bool exact = false)
         {
-            if(!IsSameUser(user, newUser)) return false;
-            RemoveUser(user);
+            var usr = SearchUser(user, exact);
+            if (usr is null) return false;
+            RemoveUser(usr);
             AddUser(newUser);
             return true;
         }
-
-        public static User? SearchUser(Func<User, bool> predicate) => _users.FirstOrDefault(user => predicate(user));
-        public static IEnumerable<User> GetUsers(byte quantity, byte offset) => _users.Skip(offset).Take(quantity);
-
-        private static bool IsSameUser(in User user, User newUser, bool exact = false)
+        public static IEnumerable<User> GetUsers(this IEnumerable<User> users, byte quantity, byte offset) => users.Skip(offset).Take(quantity);
+        public static IEnumerable<User> SortUsers(this IEnumerable<User> users, Func<User, User> func) => users.OrderBy(func);
+        private static User? SearchUser(User user, bool exact = false)
         {
-            return SearchUser(user =>
+            return _users.Where(usr =>
             exact ?
-            user.Name.Equals(newUser.Name, StringComparison.OrdinalIgnoreCase) &&
-            user.Email.Equals(newUser.Name, StringComparison.OrdinalIgnoreCase) &&
-            user.Name.Equals(newUser.Name, StringComparison.OrdinalIgnoreCase) :
-            user.Name.Equals(newUser.Name, StringComparison.OrdinalIgnoreCase) ||
-            user.Email.Equals(newUser.Name, StringComparison.OrdinalIgnoreCase) ||
-            user.Name.Equals(newUser.Name, StringComparison.OrdinalIgnoreCase)
-            ) != null;
+            usr.Name.Equals(user.Name, StringComparison.OrdinalIgnoreCase) &&
+            usr.Name.Equals(user.Email, StringComparison.OrdinalIgnoreCase) &&
+            usr.Number.Equals(user.Number, StringComparison.OrdinalIgnoreCase) :
+            usr.Name.Equals(user.Name, StringComparison.OrdinalIgnoreCase) ||
+            usr.Name.Equals(user.Email, StringComparison.OrdinalIgnoreCase) ||
+            usr.Name.Equals(user.Number, StringComparison.OrdinalIgnoreCase)).First() ?? null;
         }
+        private static IEnumerable<User?> SearchUsers(bool exact = false, params User[] users) => 
+            users.Select(user => SearchUser(user, exact)).Where(result => result != null); 
     }
 }
