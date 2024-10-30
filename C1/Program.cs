@@ -13,7 +13,7 @@ namespace C1
             Console.WriteLine("Press (1) to add a new contact");
             Console.WriteLine("Press (2) to remove a contact");
             Console.WriteLine("Press (3) to edit a contact");
-            Console.WriteLine("Press (4) to search after an contact"); //Must Sort & Pagination
+            Console.WriteLine("Press (4) to search after an contact");
             PrintLine();
             ConsoleKey key = Console.ReadKey().Key;
             switch (key)
@@ -140,30 +140,30 @@ namespace C1
                     Console.WriteLine($"Name: {usr.Name}, Number: {usr.Number}, Email: {usr.Email}");
                 }
 
-                Console.WriteLine("\nPress 'n' for Next page, 'p' for Previous page, or 'e' to Exit.");
+                Console.WriteLine("\nPress '>' for Next page, '<' for Previous page, or 'esc' to Exit.");
 
-                var key = Console.ReadKey().Key;
+                var key = Console.ReadKey(true).Key;
                 switch (key)
                 {
-                    case ConsoleKey.N:
+                    case ConsoleKey.RightArrow:
                         if (currentPage < totalPages - 1)
                             currentPage++;
                         else
                             Console.WriteLine("\nNo more pages.");
                         break;
 
-                    case ConsoleKey.P:
+                    case ConsoleKey.LeftArrow:
                         if (currentPage > 0)
                             currentPage--;
                         else
                             Console.WriteLine("\nYou're already on the first page.");
                         break;
 
-                    case ConsoleKey.E:
+                    case ConsoleKey.Escape:
                         return;
 
                     default:
-                        Console.WriteLine("\nInvalid input. Please press 'n', 'p', or 'e'.");
+                        Console.WriteLine("\nInvalid input. Please press '>', '<', or 'esc'.");
                         break;
                 }
             }

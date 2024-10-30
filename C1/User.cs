@@ -24,7 +24,7 @@ namespace C1
             var jsonContent = JsonSerializer.Serialize(_users, new JsonSerializerOptions { WriteIndented = true });
             await streamWriter.WriteAsync(jsonContent);
         }
-        public static void InitUsers()
+        public static void InitUsers() /*Credits to ChatGPT for dummy data*/
         {
             _users.Add(new("Alejandro Anderson", "67843661", "jacob12@gmail.com"));
             _users.Add(new("Regina Gray", "59042531", "mistyjones@oconnor-everett.com"));

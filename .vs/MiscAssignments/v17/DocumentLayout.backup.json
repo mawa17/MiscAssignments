@@ -31,8 +31,7 @@
               "ViewState": "AgIAAIsAAAAAAAAAAAAmwJYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-28T10:25:51.396Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -42,7 +41,7 @@
               "RelativeDocumentMoniker": "C1\\Program.cs",
               "ToolTip": "C:\\Users\\marcu\\Desktop\\H1\\Programming\\MiscAssignments\\C1\\Program.cs",
               "RelativeToolTip": "C1\\Program.cs",
-              "ViewState": "AgIAAGQAAAAAAAAAAAAwwHAAAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAUwH8AAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-28T09:53:04.968Z",
               "EditorCaption": ""
