@@ -113,18 +113,62 @@ namespace C1
         private static void SearchUser()
         {
             PrintTitle("Search Contact");
+
             var input = GetInput(skipNumber: true, skipEmail: true);
             var user = new User(input.name, null, null);
-            var users = UserRepository.SearchUsers(users: user);
-            if (users is null)
+
+            var users = UserRepository.SearchUsers(user);
+
+            if (!users.Any())
             {
-                Console.WriteLine($"User not found");
+                Console.WriteLine("User not found");
                 return;
             }
-            foreach (var usr in users)
+
+            const int pageSize = 10;
+            int currentPage = 0;
+            int totalPages = (int)Math.Ceiling(users.Count() / (double)pageSize);
+
+            while (true)
             {
-                Console.WriteLine(usr);
+                Console.Clear();
+                PrintTitle("Search Results - Page " + (currentPage + 1) + " of " + totalPages);
+
+                var pagedUsers = users.GetUsers(pageSize, currentPage * pageSize);
+                foreach (var usr in pagedUsers)
+                {
+                    Console.WriteLine($"Name: {usr.Name}, Number: {usr.Number}, Email: {usr.Email}");
+                }
+
+                Console.WriteLine("\nPress 'n' for Next page, 'p' for Previous page, or 'e' to Exit.");
+
+                var key = Console.ReadKey().Key;
+                switch (key)
+                {
+                    case ConsoleKey.N:
+                        if (currentPage < totalPages - 1)
+                            currentPage++;
+                        else
+                            Console.WriteLine("\nNo more pages.");
+                        break;
+
+                    case ConsoleKey.P:
+                        if (currentPage > 0)
+                            currentPage--;
+                        else
+                            Console.WriteLine("\nYou're already on the first page.");
+                        break;
+
+                    case ConsoleKey.E:
+                        return;
+
+                    default:
+                        Console.WriteLine("\nInvalid input. Please press 'n', 'p', or 'e'.");
+                        break;
+                }
             }
         }
+
+
     }
 }

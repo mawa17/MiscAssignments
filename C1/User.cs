@@ -2,7 +2,7 @@
 
 namespace C1
 {
-    public sealed record User(string Name, string Number, string Email);
+    public sealed record User(string Name, string? Number, string? Email);
     public static class UserRepository
     {
         private static HashSet<User> _users = new();
@@ -142,13 +142,22 @@ namespace C1
         public static IEnumerable<User> SortUsers<T>(this IEnumerable<User> users, Func<User, T> func) => users.OrderBy(func);
         public static User? GetUser(User user, bool exact = false)
         {
-            return _users.Where(usr =>
-            exact ? usr.Equals(user) :
-            usr.Name.Equals(user.Name, StringComparison.OrdinalIgnoreCase) ||
-            usr.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase) ||
-            usr.Number.Equals(user.Number, StringComparison.OrdinalIgnoreCase)).First() ?? null;
+            return _users.FirstOrDefault(usr =>
+                exact ? usr.Equals(user) :
+                (user.Name != null && usr.Name.Contains(user.Name, StringComparison.OrdinalIgnoreCase)) ||
+                (user.Email != null && usr.Email.Contains(user.Email, StringComparison.OrdinalIgnoreCase)) ||
+                (user.Number != null && usr.Number.Contains(user.Number))
+            );
         }
-        public static IEnumerable<User?> SearchUsers(bool exact = false, params User[] users) =>
-            users.Select(user => GetUser(user, exact)).Where(result => result != null);
+        public static IEnumerable<User> SearchUsers(User user, bool exact = false)
+        {
+            return _users.Where(usr =>
+                exact ? usr.Equals(user) :
+                (user.Name != null && usr.Name.Contains(user.Name, StringComparison.OrdinalIgnoreCase)) ||
+                (user.Email != null && usr.Email.Contains(user.Email, StringComparison.OrdinalIgnoreCase)) ||
+                (user.Number != null && usr.Number.Contains(user.Number))
+            );
+        }
+
     }
 }
